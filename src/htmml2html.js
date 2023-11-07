@@ -8,32 +8,39 @@ var cheerio = require('cheerio');
 /* funzioni prese da mosaico ma modificate per usare cc:tagoriginale al posto di cc (in modo da poterli stilare) */
 
 function conditional_replace(html, $) {
-  return html.replace(/<!--\[if ([^\]]*)\]>((?:(?!--)[\s\S])*?)<!\[endif\]-->/g, function (match, condition, body) {
-    var dd = '<!-- cc:start -->';
-    dd += body.replace(/<([A-Za-z:]+)/g, '<!-- cc:bo:$1 --><cc-$1') // before open tag
-      .replace(/<\/([A-Za-z:]+)>/g, '<!-- cc:bc:$1 --></cc-$1><!-- cc:ac:$1 -->') // before/after close tag
-      .replace(/\/>/g, '/><!-- cc:sc -->'); // self-close tag
-    dd += '<!-- cc:end -->';
-    var output = '<replacedcc condition="' + condition + '" style="display: none">';
-    output += $('<div>').append($(dd)).html()
-      .replace(/^<!-- cc:start -->/, '')
-      .replace(/<!-- cc:end -->$/, '');
-    output += '</replacedcc>';
-    return output;
-  });
+	return html;
+	// Appears to do be detrimental.
+  // return html.replace(/<!--\[if ([^\]]*)\]>((?:(?!--)[\s\S])*?)<!\[endif\]-->/g, function (match, condition, body) {
+	  // console.log('RIP AND TEAR');
+  //   var dd = '<!-- cc:start -->';
+  //   dd += body.replace(/<([A-Za-z:]+)/g, '<!-- cc:bo:$1 --><cc-$1') // before open tag
+  //     .replace(/<\/([A-Za-z:]+)>/g, '<!-- cc:bc:$1 --></cc-$1><!-- cc:ac:$1 -->') // before/after close tag
+  //     .replace(/\/>/g, '/><!-- cc:sc -->'); // self-close tag
+  //   dd += '<!-- cc:end -->';
+  //   var output = '<replacedcc condition="' + condition + '" style="display: none">';
+  //   output += $('<div>').append($(dd)).html()
+  //     .replace(/^<!-- cc:start -->/, '')
+  //     .replace(/<!-- cc:end -->$/, '');
+  //   output += '</replacedcc>';
+	  // console.log('output', output);
+  //   return output;
+  // });
 }
 
 function conditional_restore(html) {
-  return html.replace(/<replacedcc[^>]* condition="([^"]*)"[^>]*>([\s\S]*?)<\/replacedcc>/g, function (match, condition, body) {
-    var dd = '<!--[if ' + condition.replace(/&amp;/, '&') + ']>';
-    dd += body.replace(/<!-- cc:bc:([A-Za-z:]*) -->(<\/cc(?:-[a-zA-Z0-9]*)?>)?<!-- cc:ac:\1 -->/g, '</$1>') // restore closing tags (including lost tags)
-      .replace(/><\/cc(?:-[a-zA-Z0-9]*)?><!-- cc:sc -->/g, '/>') // restore selfclosing tags
-      .replace(/<!-- cc:bo:([A-Za-z:]*) --><cc(?:-[a-zA-Z0-9]*)?/g, '<$1') // restore open tags
-      .replace(/^.*<!-- cc:start -->/, '') // remove content before start
-      .replace(/<!-- cc:end -->.*$/, ''); // remove content after end
-    dd += '<![endif]-->';
-    return dd;
-  });
+	return html;
+	// Appears to be not needed.
+  // return html.replace(/<replacedcc[^>]* condition="([^"]*)"[^>]*>([\s\S]*?)<\/replacedcc>/g, function (match, condition, body) {
+  //   var dd = '<!--[if ' + condition.replace(/&amp;/, '&') + ']>';
+  //   dd += body.replace(/<!-- cc:bc:([A-Za-z:]*) -->(<\/cc(?:-[a-zA-Z0-9]*)?>)?<!-- cc:ac:\1 -->/g, '</$1>') // restore closing tags (including lost tags)
+  //     .replace(/><\/cc(?:-[a-zA-Z0-9]*)?><!-- cc:sc -->/g, '/>') // restore selfclosing tags
+  //     .replace(/<!-- cc:bo:([A-Za-z:]*) --><cc(?:-[a-zA-Z0-9]*)?/g, '<$1') // restore open tags
+  //     .replace(/^.*<!-- cc:start -->/, '') // remove content before start
+  //     .replace(/<!-- cc:end -->.*$/, ''); // remove content after end
+  //   dd += '<![endif]-->';
+	  // console.log('dd', dd);
+  //   return dd;
+  // });
 }
 
 
