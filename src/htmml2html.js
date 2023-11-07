@@ -202,8 +202,11 @@ var translateMetaTemplate = function (input, output) {
     $(sel).each(function (id, elem) {
       for (var attrib in attributes) if (attributes.hasOwnProperty(attrib)) {
         if ($(elem).attr(attrib) === undefined) {
+        if (undefined === curAttrib) {
           $(elem).attr(attrib, attributes[attrib]);
-        }
+        } else {
+          $(elem).attr(attrib, `${curAttrib}${attributes[attrib]}`);
+		}
       }
     });
 
