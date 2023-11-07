@@ -176,6 +176,8 @@ var tagReplace = function ($, tagName, template, attributesDef) {
 
 };
 
+const koBlockCounters = {};
+
 var translateMetaTemplate = function (input, output) {
 
   console.log("translating ", input, output);
@@ -201,7 +203,24 @@ var translateMetaTemplate = function (input, output) {
 
     $(sel).each(function (id, elem) {
       for (var attrib in attributes) if (attributes.hasOwnProperty(attrib)) {
-        if ($(elem).attr(attrib) === undefined) {
+		const curAttrib = $(elem).attr(attrib);
+
+		  // Assign data-ko-block attribte if element does not have it already.
+		  if ("data-ko-block" === attrib) {
+			  if (undefined === curAttrib) {
+				  const e = $(elem);
+					const tagName = e.prop("tagName");
+				  if (!(tagName in koBlockCounters)) {
+					koBlockCounters[tagName] = 1;
+				  }
+				  else {
+					koBlockCounters[tagName]++;
+				  }
+				  e.attr(attrib, `${tagName}${koBlockCounters[tagName]}`);
+			  }
+			  continue;
+		  }
+
         if (undefined === curAttrib) {
           $(elem).attr(attrib, attributes[attrib]);
         } else {
